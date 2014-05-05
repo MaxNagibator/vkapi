@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class Response
+public class VkImage
 {
     public int pid { get; set; }
     public int aid { get; set; }
@@ -20,5 +20,5 @@ public class Response
 
 public class RootObject
 {
-    public List<Response> response { get; set; }
+    public List<VkImage> response { get; set; }
 }

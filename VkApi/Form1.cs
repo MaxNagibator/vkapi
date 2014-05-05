@@ -28,7 +28,7 @@ namespace VkApi
         private void button1_Click(object sender, EventArgs e)
         {
 
-            string sURL = "https://api.vk.com/method/photos.get?owner_id=" + textBox1.Text + "&album_id=wall";
+            string sURL = "https://api.vk.com/method/photos.get?owner_id=" + textBox1.Text + "&album_id=" + textBox2.Text;
             WebRequest wrGETURL = WebRequest.Create(sURL);
             Stream objStream;
             objStream = wrGETURL.GetResponse().GetResponseStream();
@@ -55,6 +55,11 @@ namespace VkApi
                 webClient.DownloadFile(vkImage.src_big, "D:\\" + vkImage.pid+".jpg");
             }
             ms.Close();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
