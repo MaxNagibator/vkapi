@@ -25,41 +25,31 @@ namespace VkApi
         {
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void uiGetImagesButton_Click(object sender, EventArgs e)
         {
-
-            string sURL = "https://api.vk.com/method/photos.get?owner_id=" + textBox1.Text + "&album_id=" + textBox2.Text;
-            WebRequest wrGETURL = WebRequest.Create(sURL);
-            Stream objStream;
-            objStream = wrGETURL.GetResponse().GetResponseStream();
-            string sLine = "";
-            int i = 0;
-            StreamReader objReader = new StreamReader(objStream);
-            string a = "";
-            while (sLine != null)
+            string getImageUrl = "https://" + "api.vk.com/method/photos.get?"
+                          + "owner_id=" + ownerIdTextBox.Text
+                          + "&album_id=" + uiAlbumIdTextBox.Text;
+            WebRequest request = WebRequest.Create(getImageUrl);
+            Stream objStream = request.GetResponse().GetResponseStream();
+            if (objStream != null)
             {
-                i++;
-                sLine = objReader.ReadLine();
-                var text = String.Format("{0}:{1}", i, sLine);
-                if (sLine != null)
-                    //MessageBox.Show(text);
-                    a = sLine;
+                var objReader = new StreamReader(objStream);
+                string jsonText = objReader.ReadLine();
+                var obj = Activator.CreateInstance<RootObject>();
+                if (jsonText != null)
+                {
+                    var ms = new MemoryStream(Encoding.Unicode.GetBytes(jsonText));
+                    var serializer = new DataContractJsonSerializer(obj.GetType());
+                    obj = (RootObject)serializer.ReadObject(ms);
+                    var webClient = new WebClient();
+                    foreach (var vkImage in obj.response)
+                    {
+                        webClient.DownloadFile(vkImage.src_big, "D:\\" + vkImage.pid+".jpg");
+                    }
+                    ms.Close();
+                }
             }
-            RootObject obj = Activator.CreateInstance<RootObject>();
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(a));
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(obj.GetType());
-            obj = (RootObject)serializer.ReadObject(ms);
-            WebClient webClient = new WebClient();
-            foreach (var vkImage in obj.response)
-            {
-                webClient.DownloadFile(vkImage.src_big, "D:\\" + vkImage.pid+".jpg");
-            }
-            ms.Close();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }
