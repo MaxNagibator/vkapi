@@ -18,7 +18,12 @@ public class VkImage
     public string src_xxxbig { get; set; }
 }
 
-public class RootObject
+public class VkImages
 {
     public List<VkImage> response { get; set; }
+}
+
+public class FriendsIds
+{
+    public List<int> response { get; set; }
 }
